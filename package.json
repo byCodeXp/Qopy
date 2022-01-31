@@ -1,0 +1,10 @@
+{
+  "main": "src/bootstrap.js",
+  "private": "true",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^16.0.8"
+  }
+}
