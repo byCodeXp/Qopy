@@ -1,13 +1,33 @@
 {
-  "main": "src/bootstrap.js",
+  "main": "src/boot.ts",
   "private": "true",
   "scripts": {
-    "start": "electron ."
+    "build": "esbuild src/application/index.tsx --bundle --minify --outfile=src/dist/bundle.js",
+    "serve": "esbuild src/application/index.tsx --bundle --minify --watch --outfile=src/dist/bundle.js",
+    "start": "electron .",
+    "dev": "concurrently --kill-others \"yarn build & yarn start\" \"yarn serve\""
+  },
+  "prettier": {
+    "semi": true,
+    "bracketSpacing": true,
+    "endOfLine": "crlf",
+    "jsxSingleQuote": false,
+    "singleQuote": true,
+    "tabWidth": 3,
+    "trailingComma": "all",
+    "useTabs": true
   },
   "devDependencies": {
-    "electron": "^16.0.8"
+    "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
+    "concurrently": "^7.0.0",
+    "esbuild": "^0.14.17",
+    "prettier": "^2.5.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "typescript": "^4.5.5"
   },
   "dependencies": {
-    "jquery": "^3.6.0"
+    "electron": "^17.0.0"
   }
 }
