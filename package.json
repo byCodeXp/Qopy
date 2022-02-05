@@ -1,9 +1,18 @@
 {
   "scripts": {
     "build": "webpack",
-    "start": "electron ."
+    "start": "tsc ./src/boot.ts --outDir ./dist & electron ./dist/boot.js"
   },
-  "main": "src/boot.ts",
+  "prettier": {
+    "semi": true,
+    "bracketSpacing": true,
+    "endOfLine": "crlf",
+    "jsxSingleQuote": false,
+    "singleQuote": true,
+    "useTabs": false,
+    "trailingComma": "all",
+    "tabWidth": 4
+  },
   "devDependencies": {
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
