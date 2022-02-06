@@ -1,6 +1,6 @@
-import React, { LegacyRef, useRef } from 'react';
+import React, { useRef } from 'react';
 
-const IconClose = React.forwardRef<any, any>((props, ref) => (
+const IconClose = React.forwardRef<SVGSVGElement, {}>((props, ref) => (
     <svg
         ref={ref}
         xmlns="http://www.w3.org/2000/svg"
@@ -27,14 +27,16 @@ interface Props {
 }
 
 const Tab = ({ label, active, onClick, onClose, index }: Props) => {
-    const ref = useRef(null);
+    const ref = useRef<SVGSVGElement>(null);
 
     const handleClick = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     ) => {
-        if (event.target !== ref.current) {
-            onClick();
+        if (ref.current?.contains(event.target as Node)) {
+            return;
         }
+        
+        onClick();
     };
 
     return (

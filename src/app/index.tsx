@@ -57,14 +57,6 @@ const App: React.FC = () => {
         ipcRenderer.send('WINDOW_CLOSE');
     };
 
-    useEffect(() => {
-        console.log('Active tab: ' + activeTab);
-    }, [activeTab]);
-
-    useEffect(() => {
-        console.log('Tabs: ' + tabs.length);
-    }, [tabs]);
-
     return (
         <div className="flex flex-col h-full">
             <header className="flex flex-row justify-between drag">
