@@ -12,7 +12,7 @@ app.whenReady().then(() => {
         }
     });
 
-    window.loadFile('index.html');
+    window.loadURL('http://localhost:1234');
 
     ipcMain.on('WINDOW_CLOSE', () => {
         window.close();
