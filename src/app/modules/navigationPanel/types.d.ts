@@ -1,0 +1,4 @@
+
+interface TabInterface {
+   label: string;
+}

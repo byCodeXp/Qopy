@@ -1,7 +1,8 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
+import { reducer as tab } from '../modules/navigationPanel/reducer';
 
 const store = configureStore({
-    reducer: {},
+    reducer: { tab },
 });
 
 export { store };
