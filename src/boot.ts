@@ -1,4 +1,5 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+import { app, BrowserWindow, ipcMain } from 'electron';
+import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 
 app.whenReady().then(() => {
     const window = new BrowserWindow({
@@ -8,8 +9,8 @@ app.whenReady().then(() => {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
-            enableRemoteModule: true
-        }
+            devTools: true,
+        },
     });
 
     window.loadURL('http://localhost:1234');
@@ -29,4 +30,6 @@ app.whenReady().then(() => {
     ipcMain.on('WINDOW_MINIMIZE', () => {
         window.minimize();
     });
+
+    installExtension([REACT_DEVELOPER_TOOLS]);
 });
