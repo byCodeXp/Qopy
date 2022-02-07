@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { StrictMode, useState } from 'react';
 import { render } from 'react-dom';
 import { Tab } from './components/tab';
+import { Provider } from 'react-redux';
+import { store } from './store';
 
 import './tailwind.css';
 
@@ -106,4 +108,11 @@ const App: React.FC = () => {
     );
 };
 
-render(<App />, document.getElementById('root'));
+render(
+    <StrictMode>
+        <Provider store={store}>
+            <App />
+        </Provider>
+    </StrictMode>,
+    document.getElementById('root'),
+);
