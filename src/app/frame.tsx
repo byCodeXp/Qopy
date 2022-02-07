@@ -38,6 +38,7 @@ const Frame = ({ children, extra }: Props) => {
                 </div>
             </header>
             <main className="px-[2px] pb-[2px] flex-1">{children}</main>
+            <div className="bg-grid"></div>
         </div>
     );
 };
