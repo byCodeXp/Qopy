@@ -1,6 +1,8 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
 
+import * as fs from 'fs';
+
 app.whenReady().then(() => {
     const window = new BrowserWindow({
         frame: false,
@@ -9,8 +11,8 @@ app.whenReady().then(() => {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
-            devTools: true,
-        },
+            devTools: true,   
+        }
     });
 
     window.loadURL('http://localhost:1234');
@@ -29,6 +31,11 @@ app.whenReady().then(() => {
 
     ipcMain.on('WINDOW_MINIMIZE', () => {
         window.minimize();
+    });
+
+    ipcMain.on('SAVE_CHANGES', (event, path, content) => {
+
+        fs.writeFileSync(path, content);
     });
 
     installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]);

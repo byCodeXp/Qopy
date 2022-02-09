@@ -13,7 +13,7 @@ const TabsLogic = () => {
 
     const handleAddTab = () => {
         pushTabFunction({
-            path: '/',
+            path: '',
             label: 'untitled',
             content: '',
         });
