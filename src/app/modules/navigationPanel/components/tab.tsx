@@ -43,12 +43,14 @@ const Tab = ({ label, active, onClick, onClose }: Props) => {
             onClick={handleClick}
             className={`${
                 active
-                    ? 'bg-[#1b1b1b] pb-[2px]'
-                    : 'bg-[#333333] mb-[2px]'
-            } box-content w-[192px] h-[34px] px-[12px] flex flex-row justify-between items-center`}
+                    ? 'bg-[#1b1b1b] border-[#1b1b1b]'
+                    : 'bg-[#333333] border-[#222222]'
+            } border-b-2 px-[12px] w-[192px] flex justify-between`}
         >
-            <span className="leading-[34px] text-white font-mono text-xs">{label}</span>
-            <div onClick={onClose}>
+            <span className="text-white font-mono text-xs my-auto">
+                {label}
+            </span>
+            <div onClick={onClose} className="my-auto">
                 <IconClose ref={ref} />
             </div>
         </div>

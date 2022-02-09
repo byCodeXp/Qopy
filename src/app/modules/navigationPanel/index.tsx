@@ -12,22 +12,20 @@ const NavigationPanel = () => {
     } = TabsLogic();
 
     return (
-        <div className="flex flex-row gap-[2px] no-drag pt-[2px] px-[2px] items-center">
-            {tabs.map((tab, index) => (
-                <div key={index}>
+        <div className="flex">
+            <div className="flex flex-row gap-[2px] no-drag">
+                {tabs.map((tab, index) => (
                     <Tab
                         {...tab}
+                        key={index}
                         active={isCurrent(index)}
                         onClick={() => handleSetActiveTab(index)}
                         onClose={() => handleCloseTab(index)}
                     />
-                </div>
-            ))}
-            <div
-                onClick={handleAddTab}
-                className="w-[34px] flex justify-center"
-            >
-                <IconPlus />
+                ))}
+            </div>
+            <div className="h-[36px] w-[36px] flex" onClick={handleAddTab}>
+                <IconPlus className="h-[16px] w-[16px] m-auto" />
             </div>
         </div>
     );

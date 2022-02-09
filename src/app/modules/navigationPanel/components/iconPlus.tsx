@@ -1,7 +1,11 @@
-const IconPlus = () => (
+interface Props {
+    className?: string;
+}
+
+const IconPlus = ({ className }: Props) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-4 w-4"
+        className={className ?? 'w-[16px] h-[16px]'}
         fill="none"
         viewBox="0 0 24 24"
         stroke="#818181"

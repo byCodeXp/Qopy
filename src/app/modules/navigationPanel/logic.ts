@@ -11,7 +11,10 @@ const TabsLogic = () => {
     const isCurrent = (index: number) => index === active;
 
     const handleAddTab = () => {
-        pushTabFunction();
+        pushTabFunction({
+            path: '/',
+            label: 'untitled',
+        });
         selectTabFunction(tabs.length);
     };
 
@@ -20,7 +23,6 @@ const TabsLogic = () => {
     };
 
     const handleCloseTab = (index: number) => {
-
         const nextLength = tabs.length - 1;
 
         if (nextLength === 0) {

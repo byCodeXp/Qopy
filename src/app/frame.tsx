@@ -1,6 +1,8 @@
+import type { ReactNode } from 'react';
+
 interface Props {
-    children: JSX.Element | false;
-    extra: JSX.Element;
+    extra: ReactNode;
+    children: ReactNode;
 }
 
 const { ipcRenderer } = window.require('electron');
@@ -19,10 +21,10 @@ const Frame = ({ children, extra }: Props) => {
     };
 
     return (
-        <div className="flex flex-col h-full">
-            <header className="flex flex-row justify-start">
+        <div className="flex flex-col h-full p-[2px]">
+            <header className="flex flex-row justify-start h-[36px]">
                 {extra}
-                <div className="flex flex-row gap-[8px] py-[8px] pr-[16px] flex-1 justify-end drag">
+                <div className="flex flex-row gap-[8px] pr-[16px] flex-1 justify-end drag py-[8px]">
                     <div
                         onClick={handleClickMinimize}
                         className="w-[20px] h-[20px] rounded-[8px] shadow bg-[#949494] no-drag"
@@ -37,7 +39,7 @@ const Frame = ({ children, extra }: Props) => {
                     ></div>
                 </div>
             </header>
-            <main className="px-[2px] pb-[2px] flex-1">{children}</main>
+            <main className="flex-1">{children}</main>
             <div className="bg-grid"></div>
         </div>
     );

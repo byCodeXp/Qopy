@@ -1,9 +1,9 @@
 import { Dispatch } from '@reduxjs/toolkit';
 import { addTabAction, removeTabAction, setActiveAction } from './index';
 
-const pushTabFunction = () => {
+const pushTabFunction = (tab: TabInterface) => {
     return (dispatch: Dispatch) => {
-        dispatch(addTabAction());
+        dispatch(addTabAction(tab));
     };
 };
 
