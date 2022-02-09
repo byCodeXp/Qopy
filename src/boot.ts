@@ -1,5 +1,5 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
-import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
+import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
 
 app.whenReady().then(() => {
     const window = new BrowserWindow({
@@ -31,5 +31,5 @@ app.whenReady().then(() => {
         window.minimize();
     });
 
-    installExtension([REACT_DEVELOPER_TOOLS]);
+    installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]);
 });
