@@ -17,6 +17,9 @@ const tabSlice = createSlice({
         addTabAction(state, { payload }: PayloadAction<TabInterface>) {
             state.tabs = [...state.tabs, payload];
         },
+        changeTabAction(state, { payload }: PayloadAction<{ tab: TabInterface, index: number }>) {
+            state.tabs[payload.index] = payload.tab;
+        },
         /**
          * Remove tab from state.tabs by index passed in payload
          */
@@ -40,5 +43,5 @@ const tabSlice = createSlice({
 });
 
 export const reducer = tabSlice.reducer;
-export const { addTabAction, removeTabAction, setActiveAction } =
+export const { addTabAction, changeTabAction, removeTabAction, setActiveAction } =
     tabSlice.actions;

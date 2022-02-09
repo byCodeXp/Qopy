@@ -3,7 +3,8 @@ import { selectActive, selectTabs } from './reducer/selectors';
 import { useFunctions } from '../../store/hooks';
 
 const TabsLogic = () => {
-    const { pushTabFunction, selectTabFunction, removeTabFunction } = useFunctions();
+    const { pushTabFunction, selectTabFunction, removeTabFunction } =
+        useFunctions();
 
     const tabs = useAppSelector(selectTabs);
     const active = useAppSelector(selectActive);
@@ -14,6 +15,7 @@ const TabsLogic = () => {
         pushTabFunction({
             path: '/',
             label: 'untitled',
+            content: '',
         });
         selectTabFunction(tabs.length);
     };

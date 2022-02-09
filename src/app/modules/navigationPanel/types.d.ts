@@ -1,5 +1,6 @@
 
 interface TabInterface {
-   path: string;
    label: string;
+   path: string;
+   content: string;
 }

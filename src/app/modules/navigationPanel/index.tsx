@@ -1,6 +1,7 @@
 import { Tab } from './components/tab';
 import { IconPlus } from './components/iconPlus';
 import { TabsLogic } from './logic';
+import { useFunctions } from '../../store/hooks';
 
 const NavigationPanel = () => {
     const {
@@ -10,6 +11,32 @@ const NavigationPanel = () => {
         handleCloseTab,
         handleSetActiveTab,
     } = TabsLogic();
+
+    const { pushTabFunction, selectTabFunction } = useFunctions();
+
+    const handleDropFile = async (event: React.DragEvent<HTMLDivElement>) => {
+        console.log('File(s) dropped');
+
+        event.preventDefault();
+
+        if (event.dataTransfer.files) {
+            const file = event.dataTransfer.files[0];
+
+            pushTabFunction({
+                path: file.path,
+                label: file.name,
+                content: await file.text(),
+            });
+
+            selectTabFunction(tabs.length);
+        }
+    };
+
+    const handleDragFile = (event: React.DragEvent<HTMLDivElement>) => {
+        console.log('File(s) dragged');
+
+        event.preventDefault();
+    };
 
     return (
         <div className="flex">
@@ -24,7 +51,12 @@ const NavigationPanel = () => {
                     />
                 ))}
             </div>
-            <div className="h-[36px] w-[36px] flex" onClick={handleAddTab}>
+            <div
+                className="h-[36px] w-[36px] flex"
+                onClick={handleAddTab}
+                onDrop={handleDropFile}
+                onDragOver={handleDragFile}
+            >
                 <IconPlus className="h-[16px] w-[16px] m-auto" />
             </div>
         </div>

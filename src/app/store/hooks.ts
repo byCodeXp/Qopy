@@ -3,6 +3,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 
 import {
+    changeTabFunction,
     pushTabFunction,
     removeTabFunction,
     selectTabFunction,
@@ -10,8 +11,14 @@ import {
 
 export const useFunctions = () => {
     const dispatch = useDispatch();
+
     return bindActionCreators(
-        { pushTabFunction, removeTabFunction, selectTabFunction },
+        {
+            pushTabFunction,
+            changeTabFunction,
+            removeTabFunction,
+            selectTabFunction,
+        },
         dispatch,
     );
 };

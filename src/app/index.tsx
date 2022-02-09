@@ -14,13 +14,13 @@ import { NavigationPanel } from './modules/navigationPanel';
 import './tailwind.css';
 
 const App = () => {
-    const { pushTabFunction, selectTabFunction } = useFunctions();
+    const { pushTabFunction, changeTabFunction, selectTabFunction } =
+        useFunctions();
 
     const active = useAppSelector(selectActive);
-
     const tabs = useAppSelector(selectTabs);
 
-    const handleDropFile = (event: React.DragEvent<HTMLDivElement>) => {
+    const handleDropFile = async (event: React.DragEvent<HTMLDivElement>) => {
         console.log('File(s) dropped');
 
         event.preventDefault();
@@ -31,6 +31,7 @@ const App = () => {
             pushTabFunction({
                 path: file.path,
                 label: file.name,
+                content: await file.text(),
             });
 
             selectTabFunction(tabs.length);
@@ -43,10 +44,20 @@ const App = () => {
         event.preventDefault();
     };
 
+    const handlePrint = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const tab = tabs[active];
+
+        const value = event.target.value;
+
+        changeTabFunction({ tab: { ...tab, content: value }, index: active });
+    };
+
     return (
         <Frame extra={<NavigationPanel />}>
             {active !== -1 ? (
                 <textarea
+                    onChange={handlePrint}
+                    value={tabs[active].content}
                     spellCheck={false}
                     className="block appearance-none resize-none w-full h-full outline-none text-white bg-[#1B1B1B] p-[8px] font-mono text-[14px]"
                 ></textarea>

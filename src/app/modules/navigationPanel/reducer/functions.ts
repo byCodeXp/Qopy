@@ -1,9 +1,20 @@
 import { Dispatch } from '@reduxjs/toolkit';
-import { addTabAction, removeTabAction, setActiveAction } from './index';
+import {
+    addTabAction,
+    changeTabAction,
+    removeTabAction,
+    setActiveAction,
+} from './index';
 
 const pushTabFunction = (tab: TabInterface) => {
     return (dispatch: Dispatch) => {
         dispatch(addTabAction(tab));
+    };
+};
+
+const changeTabFunction = (obj: { tab: TabInterface; index: number }) => {
+    return (dispatch: Dispatch) => {
+        dispatch(changeTabAction({ tab: obj.tab, index: obj.index }));
     };
 };
 
@@ -19,4 +30,9 @@ const selectTabFunction = (index: number) => {
     };
 };
 
-export { pushTabFunction, removeTabFunction, selectTabFunction };
+export {
+    pushTabFunction,
+    changeTabFunction,
+    removeTabFunction,
+    selectTabFunction,
+};
