@@ -1,5 +1,5 @@
 import { render } from 'react-dom';
-import { StrictMode, useRef } from 'react';
+import { StrictMode, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { useAppSelector, useFunctions } from './store/hooks';
@@ -22,11 +22,9 @@ const App = () => {
     const active = useAppSelector(selectActive);
     const tabs = useAppSelector(selectTabs);
 
-    const activeRef = useRef(active);
-    const tabsRef = useRef(tabs);
+    const [mode, setMode] = useState<'idle' | 'save'>('idle');
 
     const handleDropFile = async (event: React.DragEvent<HTMLDivElement>) => {
-
         event.preventDefault();
 
         if (event.dataTransfer.files) {
@@ -43,12 +41,10 @@ const App = () => {
     };
 
     const handleDragFile = (event: React.DragEvent<HTMLDivElement>) => {
-
         event.preventDefault();
     };
 
     const handlePrint = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-
         const tab = tabs[active];
 
         const value = event.target.value;
@@ -60,31 +56,64 @@ const App = () => {
         if (event.ctrlKey && event.code === 'KeyS') {
             const tab = tabs[active];
 
-            if (tab.path !== '') {
-                ipcRenderer.send('SAVE_CHANGES', tab.path, tab.content);
+            if (tab.path === '') {
+                setMode('save');
+            } else {
+                save(tab.path, tab.content);
             }
         }
     };
 
+    const save = (path: string, content: string) => {
+        ipcRenderer.send('SAVE_CHANGES', path, content);
+    };
+
+    useEffect(() => {
+        setMode('idle');
+    }, [active]);
+
     return (
         <Frame extra={<NavigationPanel />}>
-            <div onKeyUp={saveEventHandler} className="h-full">
+            <div onKeyUp={saveEventHandler} className="h-full flex flex-col">
                 {active !== -1 ? (
                     <textarea
                         onChange={handlePrint}
                         value={tabs[active].content}
                         spellCheck={false}
-                        className="block appearance-none resize-none w-full h-full outline-none text-white bg-[#1B1B1B] p-[8px] font-mono text-[14px]"
+                        className="block appearance-none resize-none w-full flex-1 outline-none text-white bg-[#1B1B1B] p-[8px] font-mono text-[14px]"
                     ></textarea>
                 ) : (
                     <div
                         onDrop={handleDropFile}
                         onDragOver={handleDragFile}
-                        className="h-full w-full flex"
+                        className="flex-1 w-full flex"
                     >
                         <span className="m-auto text-slate-200/50 font-mono -translate-y-[18px] text-sm">
                             Drop file here
                         </span>
+                    </div>
+                )}
+                {mode === 'save' && (
+                    <div className="border-t-2 h-[36px] border-[#242424] bg-[#1b1b1b] px-[12px]">
+                        <input
+                            type="text"
+                            className="h-full w-full appearance-none outline-none font-mono text-xs text-white bg-transparent"
+                            spellCheck={false}
+                            placeholder="enter file name here"
+                            onKeyPress={(event) => {
+
+                                if (event.code === "Enter")
+                                {
+                                    save(
+                                        event.currentTarget.value,
+                                        tabs[active].content,
+                                    );
+
+                                    setMode('idle');
+                                }
+                                
+                            }}
+                        />
                     </div>
                 )}
             </div>
