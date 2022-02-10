@@ -15,6 +15,8 @@ const App = () => {
     const active = useAppSelector(selectActive);
     const tabs = useAppSelector(selectTabs);
 
+    const tab = tabs[active];
+
     const [mode, setMode] = useState<'idle' | 'save'>('idle');
 
     const handleDropFile = async (event: React.DragEvent<HTMLDivElement>) => {
@@ -43,18 +45,6 @@ const App = () => {
         changeTabFunction({ tab: { ...tab, content: value }, index: active });
     };
 
-    const saveEventHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (event.ctrlKey && event.code === 'KeyS') {
-            const tab = tabs[active];
-
-            if (tab.path === '') {
-                setMode('save');
-            } else {
-                save(tab.path, tab.content);
-            }
-        }
-    };
-
     const save = (path: string, content: string) => {
         writeFileSync(path, content);
 
@@ -67,15 +57,33 @@ const App = () => {
         });
     };
 
+    const windowKeyDownListener = (event: KeyboardEvent) => {
+        if (event.ctrlKey && event.code === 'KeyS') {
+            if (tab.path === '') {
+                setMode('save');
+            } else {
+                save(tab.path, tab.content);
+            }
+        }
+    };
+
     useEffect(() => {
         setMode('idle');
-    }, [active]);
+
+        if (tab) {
+            window.addEventListener('keydown', windowKeyDownListener);
+        }
+
+        return () => {
+            window.removeEventListener('keydown', windowKeyDownListener);
+        };
+    }, [tab]);
 
     return (
         <Frame extra={<NavigationPanel />}>
-            <div onKeyUp={saveEventHandler} className="h-full flex flex-col">
+            <div className="h-full flex flex-col">
                 {active !== -1 ? (
-                    <Editor onChange={handlePrint} value={tabs[active].content} />
+                    <Editor onChange={handlePrint} value={tab.content} />
                 ) : (
                     <div
                         onDrop={handleDropFile}
@@ -90,7 +98,7 @@ const App = () => {
                 {mode === 'save' && (
                     <CommandLine
                         onSubmit={(value) => {
-                            save(value, tabs[active].content);
+                            save(value, tab.content);
 
                             setMode('idle');
                         }}
