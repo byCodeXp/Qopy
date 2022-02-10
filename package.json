@@ -12,8 +12,9 @@
     "jsxSingleQuote": false,
     "singleQuote": true,
     "useTabs": false,
-    "trailingComma": "all",
-    "tabWidth": 4
+    "tabWidth": 4,
+    "printWidth": 104,
+    "trailingComma": "none"
   },
   "devDependencies": {
     "@types/react": "^17.0.38",

@@ -3,22 +3,20 @@ import { StrictMode, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { useAppSelector, useFunctions } from './store/hooks';
-import {
-    selectActive,
-    selectTabs,
-} from './modules/navigationPanel/reducer/selectors';
+import { selectActive, selectTabs } from './modules/navigationPanel/reducer/selectors';
 
 import { Frame } from './frame';
 import { NavigationPanel } from './modules/navigationPanel';
 
 import './tailwind.css';
+import { CommandLine } from './modules/commandLine';
+import { Editor } from './modules/editor';
 
 const { writeFileSync } = window.require('fs');
 const { resolve, basename } = window.require('path');
 
 const App = () => {
-    const { pushTabFunction, changeTabFunction, selectTabFunction } =
-        useFunctions();
+    const { pushTabFunction, changeTabFunction, selectTabFunction } = useFunctions();
 
     const active = useAppSelector(selectActive);
     const tabs = useAppSelector(selectTabs);
@@ -34,7 +32,7 @@ const App = () => {
             pushTabFunction({
                 path: file.path,
                 label: file.name,
-                content: await file.text(),
+                content: await file.text()
             });
 
             selectTabFunction(tabs.length);
@@ -45,10 +43,8 @@ const App = () => {
         event.preventDefault();
     };
 
-    const handlePrint = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const handlePrint = (value: string) => {
         const tab = tabs[active];
-
-        const value = event.target.value;
 
         changeTabFunction({ tab: { ...tab, content: value }, index: active });
     };
@@ -73,7 +69,7 @@ const App = () => {
 
         changeTabFunction({
             index: active,
-            tab: { ...tabs[active], path: newPath, label: newName },
+            tab: { ...tabs[active], path: newPath, label: newName }
         });
     };
 
@@ -85,12 +81,7 @@ const App = () => {
         <Frame extra={<NavigationPanel />}>
             <div onKeyUp={saveEventHandler} className="h-full flex flex-col">
                 {active !== -1 ? (
-                    <textarea
-                        onChange={handlePrint}
-                        value={tabs[active].content}
-                        spellCheck={false}
-                        className="block appearance-none resize-none w-full flex-1 outline-none text-white bg-[#1B1B1B] p-[8px] font-mono text-[14px]"
-                    ></textarea>
+                    <Editor onChange={handlePrint} value={tabs[active].content} />
                 ) : (
                     <div
                         onDrop={handleDropFile}
@@ -103,24 +94,13 @@ const App = () => {
                     </div>
                 )}
                 {mode === 'save' && (
-                    <div className="border-t-2 h-[36px] border-[#242424] bg-[#1b1b1b] px-[12px]">
-                        <input
-                            type="text"
-                            className="h-full w-full appearance-none outline-none font-mono text-xs text-white bg-transparent"
-                            spellCheck={false}
-                            placeholder="enter file name here"
-                            onKeyPress={(event) => {
-                                if (event.code === 'Enter') {
-                                    save(
-                                        event.currentTarget.value,
-                                        tabs[active].content,
-                                    );
+                    <CommandLine
+                        onSubmit={(value) => {
+                            save(value, tabs[active].content);
 
-                                    setMode('idle');
-                                }
-                            }}
-                        />
-                    </div>
+                            setMode('idle');
+                        }}
+                    />
                 )}
             </div>
         </Frame>
@@ -133,5 +113,5 @@ render(
             <App />
         </Provider>
     </StrictMode>,
-    document.getElementById('root'),
+    document.getElementById('root')
 );
