@@ -1,16 +1,10 @@
-import { render } from 'react-dom';
-import { StrictMode, useEffect, useState } from 'react';
-import { Provider } from 'react-redux';
-import { store } from './store';
-import { useAppSelector, useFunctions } from './store/hooks';
-import { selectActive, selectTabs } from './modules/navigationPanel/reducer/selectors';
-
+import { useState, useEffect } from 'react';
 import { Frame } from './frame';
-import { NavigationPanel } from './modules/navigationPanel';
-
-import './tailwind.css';
 import { CommandLine } from './modules/commandLine';
 import { Editor } from './modules/editor';
+import { NavigationPanel } from './modules/navigationPanel';
+import { selectActive, selectTabs } from './modules/navigationPanel/reducer/selectors';
+import { useFunctions, useAppSelector } from './store/hooks';
 
 const { writeFileSync } = window.require('fs');
 const { resolve, basename } = window.require('path');
@@ -107,11 +101,4 @@ const App = () => {
     );
 };
 
-render(
-    <StrictMode>
-        <Provider store={store}>
-            <App />
-        </Provider>
-    </StrictMode>,
-    document.getElementById('root')
-);
+export { App };
