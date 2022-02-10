@@ -13,7 +13,8 @@ import { NavigationPanel } from './modules/navigationPanel';
 
 import './tailwind.css';
 
-const { ipcRenderer } = window.require('electron');
+const { writeFileSync } = window.require('fs');
+const { resolve, basename } = window.require('path');
 
 const App = () => {
     const { pushTabFunction, changeTabFunction, selectTabFunction } =
@@ -65,7 +66,15 @@ const App = () => {
     };
 
     const save = (path: string, content: string) => {
-        ipcRenderer.send('SAVE_CHANGES', path, content);
+        writeFileSync(path, content);
+
+        const newPath = resolve(path);
+        const newName = basename(path);
+
+        changeTabFunction({
+            index: active,
+            tab: { ...tabs[active], path: newPath, label: newName },
+        });
     };
 
     useEffect(() => {
@@ -101,9 +110,7 @@ const App = () => {
                             spellCheck={false}
                             placeholder="enter file name here"
                             onKeyPress={(event) => {
-
-                                if (event.code === "Enter")
-                                {
+                                if (event.code === 'Enter') {
                                     save(
                                         event.currentTarget.value,
                                         tabs[active].content,
@@ -111,7 +118,6 @@ const App = () => {
 
                                     setMode('idle');
                                 }
-                                
                             }}
                         />
                     </div>
