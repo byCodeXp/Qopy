@@ -1,17 +1,25 @@
-interface Props {
-    value: string;
-    onChange: (value: string) => void;
-}
+import { tabSelector } from '../../features/tab/reducer/selectors';
+import { tabService } from '../../features/tab/service';
+import { useAppSelector } from '../../store/hooks';
 
-const Editor = ({ value, onChange }: Props) => {
+export const EditorModule = () => {
+
+    const tabs = useAppSelector(tabSelector.tabs);
+    const current = useAppSelector(tabSelector.current);
+
+    const currentTab = tabs[current];
+
+    const handleTypeText = (value: string) => {
+
+        tabService.updateTab({ ...currentTab, content: value });
+    };
+
     return (
         <textarea
-            onChange={(event) => onChange(event.target.value)}
-            value={value}
+            onChange={(event) => handleTypeText(event.target.value)}
+            value={currentTab.content}
             spellCheck={false}
-            className="block appearance-none resize-none w-full flex-1 outline-none text-white bg-[#1B1B1B] p-[8px] font-mono text-[14px]"
-        ></textarea>
+            className="block appearance-none resize-none w-full h-full outline-none text-white bg-primary-color p-[8px] font-mono text-[14px]"
+        />
     );
 };
-
-export { Editor };

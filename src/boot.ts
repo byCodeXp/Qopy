@@ -1,27 +1,45 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
-import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
+import installDevTools, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
+import { appEvents } from './events';
 
-import * as fs from 'fs';
+let devMode = false;
+
+if (process.env.NODE_ENV === 'development') {
+    devMode = true;
+}
+
+// Window options
+const windowOptions: Electron.BrowserWindowConstructorOptions = {
+    width: 1024,
+    height: 620,
+    frame: false,
+    webPreferences: {
+        devTools: devMode,
+        nodeIntegration: true,
+        contextIsolation: false
+    }
+};
 
 app.whenReady().then(() => {
-    const window = new BrowserWindow({
-        frame: false,
-        width: 800,
-        height: 600,
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
-            devTools: true,   
-        }
-    });
+    // Create window
+    const window = new BrowserWindow(windowOptions);
 
-    window.loadURL('http://localhost:1234');
+    // Load html document
+    if (devMode) {
+        window.loadURL('http://localhost:1234');
+    } else {
+        window.loadFile('index.html');
+    }
 
-    ipcMain.on('WINDOW_CLOSE', () => {
+    // Register application events
+
+    // Close window
+    ipcMain.on(appEvents.CLOSE_FRAME, () => {
         window.close();
     });
 
-    ipcMain.on('WINDOW_MAXIMIZE', () => {
+    // Maximize window
+    ipcMain.on(appEvents.MAXIMIZE_FRAME, () => {
         if (window.isMaximized()) {
             window.unmaximize();
         } else {
@@ -29,14 +47,13 @@ app.whenReady().then(() => {
         }
     });
 
-    ipcMain.on('WINDOW_MINIMIZE', () => {
+    // Minimize window
+    ipcMain.on(appEvents.MINIMIZE_FRAME, () => {
         window.minimize();
     });
 
-    ipcMain.on('SAVE_CHANGES', (event, path, content) => {
-
-        fs.writeFileSync(path, content);
-    });
-
-    installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]);
+    // Setup dev tools
+    if (devMode) {
+        installDevTools([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]);
+    }
 });
