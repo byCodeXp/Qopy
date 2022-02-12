@@ -9,13 +9,14 @@ export const TabsModuleLogic = () => {
 
     // Create new tab on click
     const handleClickPlus = () => {
-        const tab: TabType = {
+
+        tabService.pushTab({
             title: 'untitled',
             path: '',
-            content: ''
-        };
-
-        tabService.pushTab(tab);
+            content: '',
+            line: 0,
+            position: 0
+        });
 
         tabService.setCurrentTab(tabs.length);
     };
@@ -48,7 +49,9 @@ export const TabsModuleLogic = () => {
         tabService.pushTab({
             path: file.path,
             title: file.name,
-            content: await file.text()
+            content: await file.text(),
+            line: 0,
+            position: 0
         });
 
         tabService.setCurrentTab(tabs.length);
