@@ -14,7 +14,7 @@ export class KeyEventHandler {
 
             const event = this.events[i];
 
-            if (event.key.includes(key)) {
+            if (event.key === key) {
 
                 event.callback(...event.args);
             }

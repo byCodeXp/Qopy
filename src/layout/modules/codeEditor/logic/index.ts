@@ -6,7 +6,6 @@ import { KeyEventHandler } from './keyEventHandler';
 import { Keys } from './keys';
 
 export const CodeEditorModuleLogic = (props: CodeEditorModuleProps) => {
-
     const [codeLines, setCodeLines, codeLinesRef] = useReferenceState(['']);
 
     const [cursorPosition, setCursorPosition, cursorPositionRef] = useReferenceState({ X: 0, Y: 0 });
@@ -19,9 +18,10 @@ export const CodeEditorModuleLogic = (props: CodeEditorModuleProps) => {
     );
 
     const handleKeyDown = (event: KeyboardEvent) => {
-        const hanlder = new KeyEventHandler();
 
-        hanlder.on(
+        const handler = new KeyEventHandler();
+
+        handler.on(
             Keys.ArrowLeft,
             (controller: CodeEditorController) => {
                 controller.moveLeft();
@@ -29,7 +29,7 @@ export const CodeEditorModuleLogic = (props: CodeEditorModuleProps) => {
             controller
         );
 
-        hanlder.on(
+        handler.on(
             Keys.ArrowRight,
             (controller: CodeEditorController) => {
                 controller.moveRight();
@@ -37,7 +37,47 @@ export const CodeEditorModuleLogic = (props: CodeEditorModuleProps) => {
             controller
         );
 
-        hanlder.test(event.key);
+        handler.on(
+            Keys.ArrowUp,
+            (controller: CodeEditorController) => {
+                controller.moveUp();
+            },
+            controller
+        );
+
+        handler.on(
+            Keys.ArrowDown,
+            (controller: CodeEditorController) => {
+                controller.moveDown();
+            },
+            controller
+        );
+
+        handler.on(
+            Keys.BackSpace,
+            (controller: CodeEditorController) => {
+                controller.eraseBefore();
+            },
+            controller
+        );
+
+        handler.on(
+            Keys.Delete,
+            (controller: CodeEditorController) => {
+                controller.eraseAfter();
+            },
+            controller
+        );
+
+        handler.on(
+            Keys.Enter,
+            (controller: CodeEditorController) => {
+                controller.newLine();
+            },
+            controller
+        );
+
+        handler.test(event.key);
     };
 
     // Setup when open new instance of code editor
