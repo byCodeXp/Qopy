@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { useReferenceState } from '../../hooks/useReferenceState';
 import { Keys } from './keys';
-import { useCodeEditorController } from './controller';
+import { CodeEditorController, useCodeEditorController } from './controller';
+import { KeyEventHandler } from './keyEventHandler';
 
 const Cursor = (position: { X: number; Y: number }) => {
     return (
@@ -26,21 +27,19 @@ export const CodeEditorModule = (props: CodeEditorModuleProps) => {
 
     const handleKeyDown = (event: KeyboardEvent) => {
 
-        switch(event.key) {
+        const hanlder = new KeyEventHandler();
 
-            case Keys.ArrowLeft: {
+        hanlder.on(Keys.ArrowLeft, (controller: CodeEditorController) => {
 
-                controller.moveLeft();
-                
-                break;
-            }
-            case Keys.ArrowRight: {
+            controller.moveLeft();
+        }, controller);
 
-                controller.moveRight();
+        hanlder.on(Keys.ArrowRight, (controller: CodeEditorController) => {
 
-                break;
-            }
-        }
+            controller.moveRight();
+        }, controller);
+
+        hanlder.test(event.key);
     };
 
     // Setup when open new instance of code editor
